@@ -1,0 +1,49 @@
+
+@import 'srcery.css';
+
+@font-face {
+  font-family: Iosevka Term Bold;
+  font-weight: 700;
+  src: url(./iosevka-term-bold.ttf) format("truetype");
+}
+
+@font-face {
+  font-family: Iosevka Term Regular;
+  font-weight: 400;
+  src: url(./iosevka-term-regular.ttf) format("truetype");
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+body {
+  font-size: 16px;
+  font-family: Iosevka Term Regular;
+  margin: 0;
+  background: var(--srcery-black);
+  color: var(--srcery-bright-white);
+}
+
+.link {
+  color: var(--srcery-blue);
+}
+
+.hover {
+  /* background: var(--srcery-xgray2); */
+  color: var(--srcery-blue);
+  transition: color 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.ansi {
+  display: inline;
+  font-family: Iosevka Term Regular;
+  margin: 0;
+  font-size: 14px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
