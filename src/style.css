@@ -18,6 +18,14 @@ body, pre {
   color: var(--srcery-bright-white);
 }
 
+.eye {
+  color: var(--srcery-black);
+}
+
+.se {
+  color: var(--srcery-yellow);
+}
+
 .link {
   color: var(--srcery-blue);
 }
