@@ -1,6 +1,6 @@
 {
-  "name": "roosta.sh",
-  "version": "2.0.0",
+  "name": "home.roosta.sh",
+  "version": "1.0.0",
   "description": "roosta.sh home page",
   "private": true,
   "scripts": {
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/roosta/roosta.sh.git"
+    "url": "git+https://github.com/roosta/home.roosta.sh.git"
   },
   "keywords": [
     "startpage"
@@ -21,7 +21,7 @@
   "author": "roosta",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/roosta/roosta.sh/issues"
+    "url": "https://github.com/roosta/home.roosta.sh/issues"
   },
   "homepage": "https://github.com/roosta/roosta.sh#readme",
   "devDependencies": {
