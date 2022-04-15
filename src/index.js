@@ -1,5 +1,15 @@
 import "./style.css"
 
+import {
+  throttle,
+} from 'lodash-es';
+
+const directions = [
+  ["nw", "n", "ne"],
+  ["w", "c", "e"],
+  ["sw", "s", "se"]
+];
+
 // Toggle class for input coll
 function toggle(coll) {
   return () => {
@@ -36,11 +46,33 @@ function attach(coll) {
   })
 }
 
+function posToCardinal(mousex, mousey, width, height) {
+  const x = Math.floor(mousex / width * 3);
+  const y = Math.floor(mousey / height * 3);
+  return directions[y][x];
+}
+
 function main() {
-  const gh = document.querySelectorAll(".github");
-  const rd = document.querySelectorAll(".reddit");
-  attach(gh);
-  attach(rd);
+  // const gh = document.querySelectorAll(".github");
+  // const rd = document.querySelectorAll(".reddit");
+  // attach(gh);
+  // attach(rd);
+  const eyes = document.querySelectorAll(".eye");
+  onmousemove = throttle((event) => {
+    const compass = posToCardinal(
+      event.clientX,
+      event.clientY,
+      window.innerWidth,
+      window.innerHeight,
+    )
+    eyes.forEach(e => {
+      e.classList.remove("focus");
+    })
+    const eye = document.querySelectorAll(`.${compass}`);
+    eye.forEach(e => {
+      e.classList.add("focus");
+    })
+  }, 100)
 }
 
 main();
