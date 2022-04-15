@@ -1,17 +1,7 @@
 
 @import 'srcery.css';
 
-@font-face {
-  font-family: Iosevka Term Bold;
-  font-weight: 700;
-  src: url(./iosevka-term-bold.ttf) format("truetype");
-}
-
-@font-face {
-  font-family: Iosevka Term Regular;
-  font-weight: 400;
-  src: url(./iosevka-term-regular.ttf) format("truetype");
-}
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu+Mono&display=swap');
 
 .center {
   display: flex;
@@ -20,9 +10,9 @@
   height: 100vh;
 }
 
-body {
+body, pre {
   font-size: 16px;
-  font-family: Iosevka Term Regular;
+    font-family: 'Ubuntu Mono', monospace;
   margin: 0;
   background: var(--srcery-black);
   color: var(--srcery-bright-white);
@@ -41,9 +31,8 @@ body {
 
 .ansi {
   display: inline;
-  font-family: Iosevka Term Regular;
+  font-size: 0.875rem;
   margin: 0;
-  font-size: 14px;
   white-space: pre-wrap;
   word-wrap: break-word;
 }
