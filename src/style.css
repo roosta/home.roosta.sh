@@ -45,7 +45,5 @@ body {
   display: inline;
   font-family: Iosevka Term Regular;
   margin: 0;
-  font-size: 14px;
-  white-space: pre-wrap;
-  word-wrap: break-word;
+  white-space: no-wrap;
 }
