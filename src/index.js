@@ -52,6 +52,8 @@ function attach(coll) {
   })
 }
 
+// Calculate angle from mouse pos, container width height.
+// return a cardinal direction from global object ie. nw, se etc..
 function posToCardinal(mouseX, mouseY, width, height) {
   const step = 45;
   const dx =  mouseX - (width / 2);
@@ -68,8 +70,12 @@ function main() {
   // attach(gh);
   // attach(rd);
   const eyes = document.querySelectorAll(".eye");
+  const ca = document.querySelectorAll(".ca");
   onmousemove = throttle((event) => {
-    const compass = posToCardinal(
+    const center = Array.from(ca).some(el => {
+      return (el.parentNode.querySelector(":hover") === el)
+    })
+    const compass = center ? "c" : posToCardinal(
       event.clientX,
       event.clientY,
       window.innerWidth,
@@ -82,7 +88,7 @@ function main() {
     eye.forEach(e => {
       e.classList.add("focus");
     })
-  }, 100)
+  }, 200)
 }
 
 main();

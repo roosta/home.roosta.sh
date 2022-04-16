@@ -12,7 +12,7 @@
 
 body, pre {
   font-size: 16px;
-    font-family: 'Ubuntu Mono', monospace;
+  font-family: 'Ubuntu Mono', monospace;
   margin: 0;
   background: var(--srcery-black);
   color: var(--srcery-bright-white);
