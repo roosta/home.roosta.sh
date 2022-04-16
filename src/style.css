@@ -2,9 +2,9 @@
 @import 'srcery.css';
 
 @font-face {
-  font-family: Iosevka Term Regular;
+  font-family: Iosevka;
   font-weight: 400;
-  src: url(./iosevka-term-regular.ttf) format("truetype");
+  src: url(./iosevka-regular.woff2) format("woff");
 }
 
 .center {
@@ -16,7 +16,7 @@
 
 body {
   font-size: 16px;
-  font-family: Iosevka Term Regular;
+  font-family: Iosevka;
   margin: 0;
   background: var(--srcery-black);
   color: var(--srcery-bright-white);
@@ -43,7 +43,6 @@ body {
 
 .ansi {
   display: inline;
-  font-family: Iosevka Term Regular;
   margin: 0;
   white-space: no-wrap;
 }
