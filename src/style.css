@@ -43,6 +43,7 @@ body {
 
 .ansi {
   display: inline;
+  font-family: Iosevka;
   margin: 0;
-  white-space: no-wrap;
+  white-space: pre-wrap;
 }
