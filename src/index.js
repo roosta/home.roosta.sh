@@ -46,19 +46,9 @@ function attach(coll) {
   })
 }
 
-// Return a cardinal direction as string, used in to select classes The extra
-// tests is to constrain the center part a bit on the horizontal axis.
 function posToCardinal(mousex, mousey, width, height) {
-  let x = mousex / width * 3;
+  const x = Math.floor(mousex / width * 3);
   const y = Math.floor(mousey / height * 3);
-  if (x > 1.2 && x < 1.8) {
-    x = 1
-  } else if (x <= 1.2) {
-    x = 0
-  } else {
-    x = 2
-  }
-
   return directions[y][x];
 }
 
