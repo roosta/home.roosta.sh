@@ -1,6 +1,12 @@
-# 🚀 Welcome to your new awesome project!
+<pre>
+╻ ╻┏━┓┏┳┓┏━╸ ┏━┓┏━┓┏━┓┏━┓╺┳╸┏━┓ ┏━┓╻ ╻
+┣━┫┃ ┃┃┃┃┣╸  ┣┳┛┃ ┃┃ ┃┗━┓ ┃ ┣━┫ ┗━┓┣━┫
+╹ ╹┗━┛╹ ╹┗━╸╹╹┗╸┗━┛┗━┛┗━┛ ╹ ╹ ╹╹┗━┛╹ ╹
+</pre>
 
-This project has been created using **webpack-cli**, you can now run
+Landing page for roosta.sh
+
+## Building
 
 ```
 npm run build
@@ -12,4 +18,12 @@ or
 yarn build
 ```
 
-to bundle your application
+content generated to `./dist`
+
+## Development
+
+```
+npm run serve
+```
+
+browser -> localhost:8080
