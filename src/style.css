@@ -2,12 +2,6 @@
 @import 'srcery.css';
 
 @font-face {
-  font-family: Iosevka Term Bold;
-  font-weight: 700;
-  src: url(./iosevka-term-bold.ttf) format("truetype");
-}
-
-@font-face {
   font-family: Iosevka Term Regular;
   font-weight: 400;
   src: url(./iosevka-term-regular.ttf) format("truetype");
