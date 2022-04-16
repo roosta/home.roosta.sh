@@ -4,11 +4,17 @@ import {
   throttle,
 } from 'lodash-es';
 
-const directions = [
-  ["nw", "n", "ne"],
-  ["w", "c", "e"],
-  ["sw", "s", "se"]
-];
+var directions = {
+  "-180": "w",
+  "-135": "nw",
+  "-90": "n",
+  "-45": "ne",
+  "0": "e",
+  "45": "se",
+  "90": "s",
+  "135": "sw",
+  "180": "w"
+};
 
 // Toggle class for input coll
 function toggle(coll) {
@@ -46,10 +52,14 @@ function attach(coll) {
   })
 }
 
-function posToCardinal(mousex, mousey, width, height) {
-  const x = Math.floor(mousex / width * 3);
-  const y = Math.floor(mousey / height * 3);
-  return directions[y][x];
+function posToCardinal(mouseX, mouseY, width, height) {
+  const step = 45;
+  const dx =  mouseX - (width / 2);
+  const dy =  mouseY - (height / 2);
+  const radians = Math.atan2(dy, dx);
+  const angle = radians * 180 / Math.PI;
+  const key = Math.round(angle / step) * step
+  return directions[key];
 }
 
 function main() {
