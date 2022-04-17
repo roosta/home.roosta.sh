@@ -68,10 +68,15 @@ function posToCardinal(mouseX, mouseY, width, height) {
 function handleEyes() {
   const eyes = document.querySelectorAll(".eye");
   const ca = document.querySelectorAll(".ca");
+  const wait = 200;
   onmousemove = throttle((event) => {
+
+    // Check if we're in center area
     const center = Array.from(ca).some(el => {
       return (el.parentNode.querySelector(":hover") === el)
     })
+
+    // Calculate cardinal direction when center is false
     const compass = center ? "c" : posToCardinal(
       event.clientX,
       event.clientY,
@@ -85,7 +90,7 @@ function handleEyes() {
     eye.forEach(e => {
       e.classList.add("focus");
     })
-  }, 200)
+  }, wait)
 }
 
 function main() {
