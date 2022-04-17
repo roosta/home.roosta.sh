@@ -64,11 +64,8 @@ function posToCardinal(mouseX, mouseY, width, height) {
   return directions[key];
 }
 
-function main() {
-  // const gh = document.querySelectorAll(".github");
-  // const rd = document.querySelectorAll(".reddit");
-  // attach(gh);
-  // attach(rd);
+// Attach mouse listener, make eyes follow cursor.
+function handleEyes() {
   const eyes = document.querySelectorAll(".eye");
   const ca = document.querySelectorAll(".ca");
   onmousemove = throttle((event) => {
@@ -89,6 +86,14 @@ function main() {
       e.classList.add("focus");
     })
   }, 200)
+}
+
+function main() {
+  // const gh = document.querySelectorAll(".github");
+  // const rd = document.querySelectorAll(".reddit");
+  // attach(gh);
+  // attach(rd);
+  handleEyes();
 }
 
 main();
