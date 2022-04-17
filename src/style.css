@@ -22,23 +22,12 @@ body {
   color: var(--srcery-bright-white);
 }
 
-.eye {
-  color: var(--srcery-black);
+a {
+  text-decoration: none;
 }
 
-.focus {
-  color: var(--srcery-yellow);
-}
-
-.link {
-  color: var(--srcery-blue);
-}
-
-.hover {
-  /* background: var(--srcery-xgray2); */
-  color: var(--srcery-blue);
-  transition: color 0.2s ease-in-out;
-  cursor: pointer;
+a:hover {
+  background: var(--srcery-xgray2);
 }
 
 .ansi {
@@ -47,3 +36,35 @@ body {
   margin: 0;
   white-space: pre-wrap;
 }
+
+/* Colors {{{ */
+.yellow-bg {
+  background: var(--srcery-yellow);
+}
+.blue-fg {
+  color: var(--srcery-blue);
+}
+.blue-bg {
+  background: var(--srcery-blue);
+}
+.green-fg {
+  color: var(--srcery-green)
+}
+.green-bg {
+  background: var(--srcery-green)
+}
+.magenta-fg {
+  color: var(--srcery-magenta)
+}
+.magenta-bg {
+  background: var(--srcery-magenta)
+}
+.cyan-fg {
+  color: var(--srcery-cyan)
+}
+.cyan-bg {
+  background: var(--srcery-cyan)
+}
+/* }}} */
+
+/* vim: set ts=2 sw=2 tw=0 fdm=marker et :*/

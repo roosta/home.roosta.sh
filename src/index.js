@@ -4,7 +4,10 @@ import {
   throttle,
 } from 'lodash-es';
 
-var directions = {
+const defaultColor = "yellow"
+
+// Match angles to compass directions
+const directions = {
   "-180": "w",
   "-135": "nw",
   "-90": "n",
@@ -16,45 +19,45 @@ var directions = {
   "180": "w"
 };
 
-// Toggle class for input coll
-function toggle(coll) {
-  return () => {
-    coll.forEach(el => {
-      el.classList.toggle("hover");
-    })
-  }
-}
+// Track state in global obj
+const stateObj = {
+  color: defaultColor,
+  compass: "c",
+};
 
-// Handle clicks
-// Click area spans multiple elements, which can't be grouped, so we'll handle
-// link dispatch here
-function click(el) {
-  return () => {
-    if (el.classList.contains("github")) {
-      window.location.href = "https://github.com/roosta"
-    } else if (el.classList.contains("reddit")) {
-      window.location.href = "https://reddit.com"
+// Select all eye positions,
+const eyes = document.querySelectorAll(".eye");
+
+// Setup proxy to handle state changes
+// We want to fire logic when either compass or color changes
+const state = new Proxy(stateObj, {
+  set: function (target, key, value) {
+    if (key === "color") {
+      let eye = document.querySelectorAll(`.${target.compass}`);
+      eyes.forEach(e => {
+        e.classList.remove(`${target.color}-bg`);
+      })
+      eye.forEach(e => {
+        e.classList.add(`${value}-bg`)
+      })
+    } else if (key === "compass") {
+      let eye = document.querySelectorAll(`.${value}`);
+      let prev = document.querySelectorAll(`.${target.compass}`)
+      prev.forEach(e => {
+        e.classList.remove(`${target.color}-bg`);
+      })
+      eye.forEach(e => {
+        e.classList.add(`${target.color}-bg`);
+      })
     }
+    target[key] = value;
+    return true;
   }
-}
-
-// Setup hover for clickable elements,
-// Tricky to use css for this due to how the ansi art is structured
-function attach(coll) {
-  const events = ["mouseenter", "mouseleave"];
-  events.forEach(evt => {
-    coll.forEach(el => {
-      el.addEventListener(evt, toggle(coll))
-    })
-  })
-  coll.forEach(el => {
-    el.addEventListener("click", click(el))
-  })
-}
+})
 
 // Calculate angle from mouse pos, container width height.
 // return a cardinal direction from global object ie. nw, se etc..
-function posToCardinal(mouseX, mouseY, width, height) {
+function posToDirection(mouseX, mouseY, width, height) {
   const step = 45;
   const dx =  mouseX - (width / 2);
   const dy =  mouseY - (height / 2);
@@ -64,41 +67,47 @@ function posToCardinal(mouseX, mouseY, width, height) {
   return directions[key];
 }
 
-// Attach mouse listener, make eyes follow cursor.
-function handleEyes() {
-  const eyes = document.querySelectorAll(".eye");
-  const ca = document.querySelectorAll(".ca");
+function handleLinks() {
+  const links = document.querySelectorAll("a");
+  links.forEach(el => {
+    el.addEventListener("mouseenter", () => {
+      state.color = el.dataset.color
+    })
+    el.addEventListener("mouseleave", () => {
+      state.color = defaultColor;
+    })
+  })
+
+}
+
+// Tracks mouse, and updates state.compass with cardinal directions
+function trackCompass() {
+  const centerArea = document.querySelectorAll(".ca");
   const wait = 200;
   onmousemove = throttle((event) => {
 
     // Check if we're in center area
-    const center = Array.from(ca).some(el => {
+    const center = Array.from(centerArea).some(el => {
       return (el.parentNode.querySelector(":hover") === el)
     })
 
     // Calculate cardinal direction when center is false
-    const compass = center ? "c" : posToCardinal(
+    const compass = center ? "c" : posToDirection(
       event.clientX,
       event.clientY,
       window.innerWidth,
       window.innerHeight,
     )
-    eyes.forEach(e => {
-      e.classList.remove("focus");
-    })
-    const eye = document.querySelectorAll(`.${compass}`);
-    eye.forEach(e => {
-      e.classList.add("focus");
-    })
+    if (compass !== state.compass) {
+      state.compass = compass;
+    }
   }, wait)
 }
 
+// Entry
 function main() {
-  // const gh = document.querySelectorAll(".github");
-  // const rd = document.querySelectorAll(".reddit");
-  // attach(gh);
-  // attach(rd);
-  handleEyes();
+  handleLinks();
+  trackCompass();
 }
 
 main();
