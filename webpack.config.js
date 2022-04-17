@@ -3,11 +3,13 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const isProduction = process.env.NODE_ENV == 'production';
 const stylesHandler = MiniCssExtractPlugin.loader;
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const config = {
   entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
+    clean: true,
   },
   devServer: {
     watchFiles: 'src/**/*',
@@ -20,6 +22,7 @@ const config = {
     host: '0.0.0.0',
   },
   plugins: [
+    new CleanWebpackPlugin(),
     new MiniCssExtractPlugin(),
     new HtmlWebpackPlugin({
       template: 'src/index.hbs',
