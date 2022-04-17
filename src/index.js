@@ -93,10 +93,10 @@ function trackCompass() {
 
     // Calculate cardinal direction when center is false
     const compass = center ? "c" : posToDirection(
-      event.clientX,
-      event.clientY,
-      window.innerWidth,
-      window.innerHeight,
+      event.pageX,
+      event.pageY,
+      document.body.offsetWidth,
+      document.body.offsetHeight,
     )
     if (compass !== state.compass) {
       state.compass = compass;
