@@ -19,41 +19,39 @@ const directions = {
   "180": "w"
 };
 
-// Track state in global obj
-const stateObj = {
-  color: defaultColor,
-  compass: "c",
-};
+const state = {
+  _color: defaultColor,
+  _compass: "c",
+  eyes: document.querySelectorAll(".eye"),
 
-// Select all eye positions,
-const eyes = document.querySelectorAll(".eye");
-
-// Setup proxy to handle state changes
-// We want to fire logic when either compass or color changes
-const state = new Proxy(stateObj, {
-  set: function (target, key, value) {
-    if (key === "color") {
-      let eye = document.querySelectorAll(`.${target.compass}`);
-      eyes.forEach(e => {
-        e.classList.remove(`${target.color}-bg`);
-      })
-      eye.forEach(e => {
-        e.classList.add(`${value}-bg`)
-      })
-    } else if (key === "compass") {
-      let eye = document.querySelectorAll(`.${value}`);
-      let prev = document.querySelectorAll(`.${target.compass}`)
-      prev.forEach(e => {
-        e.classList.remove(`${target.color}-bg`);
-      })
-      eye.forEach(e => {
-        e.classList.add(`${target.color}-bg`);
-      })
-    }
-    target[key] = value;
-    return true;
+  get color() {
+    return this._color;
+  },
+  set color(c) {
+    let eye = document.querySelectorAll(`.${this.compass}`);
+    this.eyes.forEach(e => {
+      e.classList.remove(`${this.color}-bg`);
+    })
+    eye.forEach(e => {
+      e.classList.add(`${c}-bg`)
+    })
+    this._color = c;
+  },
+  get compass() {
+    return this._compass;
+  },
+  set compass(c) {
+    let eye = document.querySelectorAll(`.${c}`);
+    let prev = document.querySelectorAll(`.${this.compass}`)
+    prev.forEach(e => {
+      e.classList.remove(`${this.color}-bg`);
+    })
+    eye.forEach(e => {
+      e.classList.add(`${this.color}-bg`);
+    })
+    this._compass = c;
   }
-})
+}
 
 // Calculate angle from mouse pos, container width height.
 // return a cardinal direction from global object ie. nw, se etc..
