@@ -55,10 +55,10 @@ const state = {
 
 // Calculate angle from mouse pos, container width height.
 // return a cardinal direction from global object ie. nw, se etc..
-function posToDirection(mouseX, mouseY, width, height) {
+function posToDirection(mouseX, mouseY, centerX, centerY) {
   const step = 45;
-  const dx =  mouseX - (width / 2);
-  const dy =  mouseY - (height / 2);
+  const dx =  mouseX - centerX;
+  const dy =  mouseY - centerY;
   const radians = Math.atan2(dy, dx);
   const angle = radians * 180 / Math.PI;
   const key = Math.round(angle / step) * step
@@ -81,20 +81,24 @@ function handleLinks() {
 // Tracks mouse, and updates state.compass with cardinal directions
 function trackCompass() {
   const centerArea = document.querySelectorAll(".ca");
+  const anchorEl = document.querySelector(".anchor");
   const wait = 200;
   onmousemove = throttle((event) => {
 
     // Check if we're in center area
-    const center = Array.from(centerArea).some(el => {
+    const inCenter = Array.from(centerArea).some(el => {
       return (el.parentNode.querySelector(":hover") === el)
     })
 
+    const anchorRect = anchorEl.getBoundingClientRect();
+    const bodyRect = document.body.getBoundingClientRect();
+
     // Calculate cardinal direction when center is false
-    const compass = center ? "c" : posToDirection(
+    const compass = inCenter ? "c" : posToDirection(
       event.pageX,
       event.pageY,
-      document.body.offsetWidth,
-      document.body.offsetHeight,
+      anchorRect.left - bodyRect.left - (anchorRect.width / 2),
+      anchorRect.top - bodyRect.top - (anchorRect.height / 2),
     )
     if (compass !== state.compass) {
       state.compass = compass;

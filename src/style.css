@@ -7,7 +7,7 @@
   src: url(./iosevka-regular.woff2) format("woff");
 }
 
-.center {
+main {
   display: flex;
   justify-content: center;
   align-items: center;
