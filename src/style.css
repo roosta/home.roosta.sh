@@ -34,7 +34,7 @@ a:hover {
   display: inline;
   font-family: Iosevka;
   margin: 0;
-  white-space: pre-wrap;
+  white-space: pre;
 }
 
 /* Colors {{{ */
