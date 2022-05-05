@@ -14,6 +14,10 @@
   height: 100vh;
 }
 
+.cont {
+  overflow-x: auto;
+}
+
 body {
   font-size: 16px;
   font-family: Iosevka;
