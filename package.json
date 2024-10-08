@@ -27,7 +27,7 @@
   "devDependencies": {
     "@webpack-cli/generators": "^3.0.7",
     "clean-webpack-plugin": "^4.0.0",
-    "css-loader": "^6.7.1",
+    "css-loader": "^7.1.2",
     "eslint": "^8.13.0",
     "handlebars": "^4.7.8",
     "handlebars-loader": "^1.7.3",
