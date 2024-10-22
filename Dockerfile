@@ -1,10 +1,8 @@
-FROM node:latest as build-deps
+FROM node:20.18 AS build-deps
 WORKDIR /usr/src/app
-COPY package.json package-lock.json ./
-RUN npm install
 COPY . ./
+RUN npm ci
 RUN npm run build
-
 
 # Nginx
 FROM nginx:latest
