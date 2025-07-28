@@ -12,7 +12,7 @@
     "eslint": "^9.31.0",
     "vite-plugin-handlebars": "^2.0.0",
     "htmlhint": "^1.6.3",
-    "vite": "^7.0.5"
+    "vite": "^7.0.6"
   },
   "dependencies": {
     "lodash-es": "^4.17.21"
