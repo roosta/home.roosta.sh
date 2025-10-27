@@ -4,21 +4,21 @@ Landing page for roosta.sh
 
 ## Installation
 
-Clone this repository and run `npm install`
+Clone this repository and run `pnpm install`
 ```shell
 # https
 git clone https://github.com/roosta/home.roosta.sh
 # or using ssh
 git clone git@github.com:roosta/home.roosta.sh.git
 
-cd home.roosta.sh && npm install
+cd home.roosta.sh && pnpm install
 ```
 ## Development
 
 To start a server that will host a live reload serve of the page:
 
 ```
-npm run serve
+pnpm run serve
 ```
 
 The [config](webpack.config.js) will try to open `google-chrome-unstable` with
@@ -33,7 +33,7 @@ Included in the repo is a [Dockerfile](Dockerfile), you could use that to
 deploy the app with nginx. I personally use Dockerfiles and dokku setup on a
 digital ocean droplet, but you can just run
 ```sh
-npm run build
+pnpm run build
 ```
 
 or
