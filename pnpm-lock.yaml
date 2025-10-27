@@ -13,13 +13,13 @@ importers:
         version: 4.17.21
     devDependencies:
       eslint:
-        specifier: ^9.36.0
+        specifier: ^9.38.0
         version: 9.38.0
       htmlhint:
-        specifier: ^1.6.3
+        specifier: ^1.7.1
         version: 1.7.1
       vite:
-        specifier: ^7.1.7
+        specifier: ^7.1.12
         version: 7.1.12
       vite-plugin-handlebars:
         specifier: ^2.0.0
