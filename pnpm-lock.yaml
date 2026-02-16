@@ -16,8 +16,8 @@ importers:
         specifier: ^10.0.0
         version: 10.0.0
       htmlhint:
-        specifier: ^1.9.0
-        version: 1.9.0
+        specifier: ^1.9.1
+        version: 1.9.1
       vite:
         specifier: ^7.3.1
         version: 7.3.1
@@ -691,8 +691,8 @@ packages:
     resolution: {integrity: sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==}
     engines: {node: '>=8'}
 
-  htmlhint@1.9.0:
-    resolution: {integrity: sha512-1TnumIleKjf1d/y9YU3RroQGJjKj/iLWoeXGJ7Cg65jxM8wWM5pL5oY73KpqkA6lKGx0kvr7RbchQ0EEuRvhPw==}
+  htmlhint@1.9.1:
+    resolution: {integrity: sha512-nbnzHfgc7x3h7B83Y4fVFHDSMIjI9pepSgFhIYVE0Sj/Ulxd32loDgk+/79kjIhi4dvoIq6WlOMqbkaUQZF7lQ==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -1477,7 +1477,7 @@ snapshots:
 
   has-flag@4.0.0: {}
 
-  htmlhint@1.9.0:
+  htmlhint@1.9.1:
     dependencies:
       async: 3.2.6
       chalk: 4.1.2
