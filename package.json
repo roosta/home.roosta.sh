@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "devDependencies": {
-    "eslint": "^10.0.0",
+    "eslint": "^10.0.2",
     "vite-plugin-handlebars": "^2.0.0",
     "htmlhint": "^1.9.1",
     "vite": "^7.3.1"
