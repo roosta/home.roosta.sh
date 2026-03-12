@@ -1,37 +1,4 @@
-:root {
-  --srcery-black:          #1C1B19;
-  --srcery-red:            #EF2F27;
-  --srcery-green:          #519F50;
-  --srcery-yellow:         #FBB829;
-  --srcery-blue:           #2C78BF;
-  --srcery-magenta:        #E02C6D;
-  --srcery-cyan:           #0AAEB3;
-  --srcery-white:          #BAA67F;
-  --srcery-bright-black:   #918175;
-  --srcery-bright-red:     #F75341;
-  --srcery-bright-green:   #98BC37;
-  --srcery-bright-yellow:  #FED06E;
-  --srcery-bright-blue:    #68A8E4;
-  --srcery-bright-magenta: #FF5C8F;
-  --srcery-bright-cyan:    #2BE4D0;
-  --srcery-bright-white:   #FCE8C3;
-  --srcery-orange:         #FF5F00;
-  --srcery-bright-orange:  #FF8700;
-  --srcery-teal:           #008080;
-  --srcery-hard-black:     #121212;
-  --srcery-xgray1:         #262626;
-  --srcery-xgray2:         #303030;
-  --srcery-xgray3:         #3A3A3A;
-  --srcery-xgray4:         #444444;
-  --srcery-xgray5:         #4E4E4E;
-  --srcery-xgray6:         #585858;
-  --srcery-xgray7:         #626262;
-  --srcery-xgray8:         #6C6C6C;
-  --srcery-xgray9:         #767676;
-  --srcery-xgray10:        #808080;
-  --srcery-xgray11:        #8A8A8A;
-  --srcery-xgray12:        #949494;
-}
+@import "@srcery-colors/srcery-palette";
 
 @font-face {
   font-family: Iosevka;
@@ -54,8 +21,8 @@ body {
   font-size: 16px;
   font-family: Iosevka;
   margin: 0;
-  background: var(--srcery-black);
-  color: var(--srcery-bright-white);
+  background: var(--srcery-palette-black);
+  color: var(--srcery-palette-bright-white);
 }
 
 a {
@@ -63,7 +30,7 @@ a {
 }
 
 a:hover {
-  background: var(--srcery-xgray2);
+  background: var(--srcery-palette-gray1);
 }
 
 .ansi {
@@ -75,31 +42,31 @@ a:hover {
 
 /* Colors {{{ */
 .yellow-bg {
-  background: var(--srcery-yellow);
+  background: var(--srcery-palette-yellow);
 }
 .blue-fg {
-  color: var(--srcery-blue);
+  color: var(--srcery-palette-blue);
 }
 .blue-bg {
-  background: var(--srcery-blue);
+  background: var(--srcery-palette-blue);
 }
 .green-fg {
-  color: var(--srcery-green)
+  color: var(--srcery-palette-green)
 }
 .green-bg {
-  background: var(--srcery-green)
+  background: var(--srcery-palette-green)
 }
 .magenta-fg {
-  color: var(--srcery-magenta)
+  color: var(--srcery-palette-magenta)
 }
 .magenta-bg {
-  background: var(--srcery-magenta)
+  background: var(--srcery-palette-magenta)
 }
 .cyan-fg {
-  color: var(--srcery-cyan)
+  color: var(--srcery-palette-cyan)
 }
 .cyan-bg {
-  background: var(--srcery-cyan)
+  background: var(--srcery-palette-cyan)
 }
 /* }}} */
 
