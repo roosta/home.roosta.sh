@@ -16,6 +16,6 @@
   },
   "dependencies": {
     "@srcery-colors/srcery-palette": "2.0.0-alpha.0",
-    "lodash-es": "^4.17.23"
+    "lodash-es": "^4.18.1"
   }
 }
