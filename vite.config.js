@@ -1,10 +1,8 @@
-import handlebars from "vite-plugin-handlebars";
-import { resolve } from 'path';
+import { defineConfig } from 'vite'
 
-export default {
-  plugins: [
-    handlebars({
-      partialDirectory: resolve(__dirname, 'partials'),
-    })
-  ]
-};
+export default defineConfig({
+  root: 'src',
+  build: {
+    outDir: '../dist',
+  },
+})
