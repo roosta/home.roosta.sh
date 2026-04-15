@@ -19,19 +19,54 @@ const ANCHOR = [26, 63];
 const CENTER_BOUNDS = { rows: [24, 28], cols: [51, 79] };
 
 function charGrid(pre) {
-  const lines = pre.textContent.split("\n");
+  // Flatten child nodes into {ch, anchor} pairs, preserving anchor membership
+  const chars = [];
+  for (const node of pre.childNodes) {
+    if (node.nodeType === Node.TEXT_NODE) {
+      for (const ch of node.textContent) chars.push({ ch, anchor: null });
+    } else if (node.nodeName === "A") {
+      for (const ch of node.textContent) chars.push({ ch, anchor: node });
+    }
+  }
+
+  // Split into lines on newline
+  const lines = [];
+  let current = [];
+  for (const item of chars) {
+    if (item.ch === "\n") { lines.push(current); current = []; }
+    else current.push(item);
+  }
+  if (current.length) lines.push(current);
+
   pre.textContent = "";
   return lines.map((line, y) => {
-    const row = document.createElement("span");
-    row.id = `line-${y}`;
-    const spans = [...line].map((ch) => {
+    const rowEl = document.createElement("span");
+    rowEl.id = `line-${y}`;
+    let curAnchorNode = null;
+    let curAnchorEl = null;
+
+    const spans = line.map(({ ch, anchor }) => {
       const s = document.createElement("span");
       s.textContent = ch;
-      row.appendChild(s);
+
+      if (anchor !== curAnchorNode) {
+        if (curAnchorEl) rowEl.appendChild(curAnchorEl);
+        curAnchorNode = anchor;
+        if (anchor) {
+          curAnchorEl = document.createElement("a");
+          for (const attr of anchor.attributes) curAnchorEl.setAttribute(attr.name, attr.value);
+        } else {
+          curAnchorEl = null;
+        }
+      }
+
+      (curAnchorEl ?? rowEl).appendChild(s);
       return s;
     });
-    row.appendChild(document.createTextNode("\n"));
-    pre.appendChild(row);
+
+    if (curAnchorEl) rowEl.appendChild(curAnchorEl);
+    rowEl.appendChild(document.createTextNode("\n"));
+    pre.appendChild(rowEl);
     return spans;
   });
 }
