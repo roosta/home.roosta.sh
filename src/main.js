@@ -3,28 +3,20 @@ import { throttle } from "lodash-es";
 
 const DEFAULT_COLOR = "yellow";
 
-// Compass as grid offset: [row, col] in a 3x3
 const COMPASS = {
   nw: [0, 0], n: [0, 1], ne: [0, 2],
    w: [1, 0], c: [1, 1],  e: [1, 2],
   sw: [2, 0], s: [2, 1], se: [2, 2],
 };
 
-const DIRECTIONS = [
-  [-180, "w"], [-135, "nw"], [-90, "n"], [-45, "ne"],
-  [0, "e"], [45, "se"], [90, "s"], [135, "sw"], [180, "w"],
-];
+const ANGLE_TO_DIR = {
+  "-180": "w", "-135": "nw", "-90": "n", "-45": "ne",
+  "0": "e", "45": "se", "90": "s", "135": "sw", "180": "w",
+};
 
 const EYE_ORIGINS = [[25, 52], [25, 66]];
 const ANCHOR = [26, 63];
 const CENTER_BOUNDS = { rows: [24, 28], cols: [51, 79] };
-
-const LINKS = [
-  { text: "  code  ", row: 36, col: 39, href: "https://github.com/roosta", color: "blue" },
-  { text: "  art   ", row: 41, col: 39, href: "https://gallery.roosta.sh", color: "magenta" },
-  { text: "  whois ", row: 36, col: 82, href: "#", color: "green" },
-  { text: "  blog  ", row: 41, col: 82, href: "#", color: "cyan" },
-];
 
 function charGrid(pre) {
   const lines = pre.textContent.split("\n");
@@ -53,7 +45,7 @@ function cellPos(el) {
 function getCompass(mx, my, ax, ay) {
   const angle = Math.atan2(my - ay, mx - ax) * 180 / Math.PI;
   const step = Math.round(angle / 45) * 45;
-  return DIRECTIONS.find(([a]) => a === step)?.[1] ?? "c";
+  return ANGLE_TO_DIR[step] ?? "c";
 }
 
 function isInCenter(grid, x, y) {
@@ -63,52 +55,43 @@ function isInCenter(grid, x, y) {
   return x >= tl.left && x <= br.right && y >= tl.top && y <= br.bottom;
 }
 
+function eyeCells(grid, [r, c], dir) {
+  const [dr, dc] = COMPASS[dir];
+  const col = c + dc * 2;
+  return [grid[r + dr][col], grid[r + dr][col + 1]];
+}
+
+function initEyes(grid) {
+  return EYE_ORIGINS.map((origin) => {
+    const [r, c] = origin;
+    const snapshot = {};
+    for (const [dir, [dr, dc]] of Object.entries(COMPASS)) {
+      const col = c + dc * 2;
+      snapshot[dir] = [grid[r + dr][col].textContent, grid[r + dr][col + 1].textContent];
+    }
+    const eyeChar = snapshot["c"];
+    eyeCells(grid, origin, "c").forEach((s) => (s.textContent = " "));
+    snapshot["c"] = [" ", " "];
+    return { origin, snapshot, eyeChar };
+  });
+}
+
 function main() {
   const grid = charGrid(document.querySelector("pre.ansi"));
   let compass = "c";
   let color = DEFAULT_COLOR;
   let prevCompass = null;
 
-  // Snapshot all 9 compass positions for each eye socket, grab eye char from center
-  const eyeData = EYE_ORIGINS.map(([r, c]) => {
-    const snapshot = {};
-    for (const [dir, [dr, dc]] of Object.entries(COMPASS)) {
-      const row = r + dr;
-      const col = c + dc * 2;
-      snapshot[dir] = [grid[row][col].textContent, grid[row][col + 1].textContent];
-    }
-    const eyeChar = snapshot["c"];
-    // Blank center in both the grid and snapshot so restoring it never re-draws the eye
-    const [cdr, cdc] = COMPASS["c"];
-    const crow = r + cdr;
-    const ccol = c + cdc * 2;
-    grid[crow][ccol].textContent = " ";
-    grid[crow][ccol + 1].textContent = " ";
-    snapshot["c"] = [" ", " "];
-    return { origin: [r, c], snapshot, eyeChar };
-  });
+  const eyeData = initEyes(grid);
 
   function render() {
-    eyeData.forEach(({ origin: [r, c], snapshot, eyeChar }) => {
-      // Restore previous position to original chars
+    eyeData.forEach(({ origin, snapshot, eyeChar }) => {
       if (prevCompass !== null) {
-        const [pdr, pdc] = COMPASS[prevCompass];
-        const prow = r + pdr;
-        const pcol = c + pdc * 2;
-        grid[prow][pcol].textContent = snapshot[prevCompass][0];
-        grid[prow][pcol + 1].textContent = snapshot[prevCompass][1];
-        grid[prow][pcol].className = "";
-        grid[prow][pcol + 1].className = "";
+        eyeCells(grid, origin, prevCompass)
+          .forEach((s, i) => { s.textContent = snapshot[prevCompass][i]; s.className = ""; });
       }
-
-      // Place eye char at new compass position
-      const [dr, dc] = COMPASS[compass];
-      const row = r + dr;
-      const col = c + dc * 2;
-      grid[row][col].textContent = eyeChar[0];
-      grid[row][col + 1].textContent = eyeChar[1];
-      grid[row][col].className = `${color}-fg`;
-      grid[row][col + 1].className = `${color}-fg`;
+      eyeCells(grid, origin, compass)
+        .forEach((s, i) => { s.textContent = eyeChar[i]; s.className = `${color}-fg`; });
     });
     prevCompass = compass;
   }
@@ -133,3 +116,4 @@ function main() {
 }
 
 main();
+
