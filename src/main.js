@@ -19,7 +19,7 @@ const ANCHOR = [26, 63];
 const CENTER_BOUNDS = { rows: [24, 28], cols: [51, 79] };
 
 const ARTIFACTS = [
-`
+  `
 ┌┐
 ││
 └┘
@@ -29,6 +29,31 @@ const ARTIFACTS = [
 │     │
 │     │
 └─────┘
+`,
+`
+┌┐
+││
+││
+││
+││
+││
+││
+││
+││
+││
+││
+│└──┐
+│   │
+└───┘
+`,
+`
+  ┌┐
+  ││
+  ││
+  ││
+┌─┘│
+│  │
+└──┘
 `
 ]
 
@@ -157,11 +182,14 @@ function animateArtifact(grid, artifactStr, startCol, startRow, intervalMs = 300
 
       // If we intersect the sheer line
       if (r === startRow) {
-        // Find leftmost and rightmost non-space positions in this artifact line
-        const line = lines[dy];
+        if (dy === 0) continue; // nothing visible above sheer yet
+
+        // Use the last visible row (dy-1) to determine corner positions,
+        // so corners reflect the actual bottom edge of what's visible
+        const refLine = lines[dy - 1];
         let first = -1, last = -1;
-        for (let dx = 0; dx < line.length; dx++) {
-          if (line[dx] !== ' ') { if (first === -1) first = dx; last = dx; }
+        for (let dx = 0; dx < refLine.length; dx++) {
+          if (refLine[dx] !== ' ') { if (first === -1) first = dx; last = dx; }
         }
         if (first === -1) continue;
         // Left corner → ┘, right corner → └, blank everything between
@@ -216,7 +244,7 @@ function main() {
 
   render();
 
-  animateArtifact(grid, ARTIFACTS[1], 10, 27);
+  animateArtifact(grid, ARTIFACTS[3], 10, 27);
 
   document.querySelectorAll("a").forEach((a) => {
     a.addEventListener("mouseenter", () => { color = a.dataset.color; render(); });
