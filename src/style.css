@@ -40,7 +40,6 @@ a:hover {
   white-space: pre;
 }
 
-/* Colors {{{ */
 .yellow-bg {
   background: var(--srcery-palette-yellow);
 }
@@ -68,6 +67,9 @@ a:hover {
 .cyan-bg {
   background: var(--srcery-palette-cyan)
 }
-/* }}} */
+
+.artifact-fg { color: var(--srcery-palette-bright-white); }
+
+.artefact-hidden { color: var(--srcery-palette-black) }
 
 /* vim: set ts=2 sw=2 tw=0 fdm=marker et :*/
