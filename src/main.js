@@ -1,5 +1,6 @@
 import "./style.css";
 import { throttle } from "lodash-es";
+import ARTIFACTS from "virtual:artifacts";
 
 const DEFAULT_COLOR = "yellow";
 
@@ -10,7 +11,6 @@ const COMPASS = {
   sw: [2, 0], s: [2, 1], se: [2, 2],
 };
 
-// Maps the nearest 45° snap of atan2 to a compass direction
 const ANGLE_TO_DIR = {
   "-180": "w", "-135": "nw", "-90": "n", "-45": "ne",
      "0": "e",   "45": "se",  "90": "s", "135": "sw", "180": "w",
@@ -23,48 +23,10 @@ const EYE_ORIGINS   = [[25, 52], [25, 66]];
 const ANCHOR_CELL   = [26, 63];
 const CENTER_BOUNDS = { rows: [24, 28], cols: [51, 79] };
 
-const ARTIFACTS = [
-  `
-┌┐
-││
-└┘
-`,
-`
-┌─────┐
-│     │
-│     │
-└─────┘
-`,
-`
-┌┐
-││
-││
-││
-││
-││
-││
-││
-││
-││
-││
-│└──┐
-│   │
-└───┘
-`,
-`
-  ┌┐
-  ││
-  ││
-  ││
-┌─┘│
-│  │
-└──┘
-`
-];
 
-// ─── charGrid helpers ────────────────────────────────────────────────────────
+// charGrid helpers ------------------------------------------------ {{{
 
-/** Flatten a <pre>'s child nodes into {ch, anchor} pairs. */
+// Parse anchor nodes from markup
 function parseNodes(pre) {
   const chars = [];
   for (const node of pre.childNodes) {
@@ -77,7 +39,8 @@ function parseNodes(pre) {
   return chars;
 }
 
-/** Split a flat {ch, anchor}[] into lines on '\n', dropping a trailing empty line. */
+// Split a flat {ch, anchor}[] into lines on '\n', dropping a trailing empty
+// line.
 function splitIntoLines(chars) {
   const lines = chars.reduce((acc, item) => {
     if (item.ch === "\n") acc.push([]);
@@ -88,7 +51,7 @@ function splitIntoLines(chars) {
   return lines;
 }
 
-/** Pad every line to the same width so empty rows remain addressable. */
+// Pad lines to add animation space
 function padLines(lines) {
   const maxLen = Math.max(...lines.map(l => l.length));
   return lines.map(line => [
@@ -97,7 +60,7 @@ function padLines(lines) {
   ]);
 }
 
-/** Build a <span id="line-y"> row element, reconstructing any <a> wrappers. */
+// Build a <span id="line-y"> row element, reconstructing any <a> wrappers.
 function buildRow(line, y, pre) {
   const rowEl = document.createElement("span");
   rowEl.id = `line-${y}`;
@@ -113,7 +76,9 @@ function buildRow(line, y, pre) {
       curAnchorNode = anchor;
       if (anchor) {
         curAnchorEl = document.createElement("a");
-        for (const attr of anchor.attributes) curAnchorEl.setAttribute(attr.name, attr.value);
+        for (const attr of anchor.attributes) {
+          curAnchorEl.setAttribute(attr.name, attr.value);
+        }
       } else {
         curAnchorEl = null;
       }
@@ -131,30 +96,31 @@ function buildRow(line, y, pre) {
 
 // ─── charGrid ────────────────────────────────────────────────────────────────
 
-/** Parse ASCII art from a <pre> and replace its content with a grid of <span>s. */
+// Build a grid from index.html <pre> tags
 function charGrid(pre) {
   const lines = padLines(splitIntoLines(parseNodes(pre)));
   pre.textContent = "";
   return lines.map((line, y) => buildRow(line, y, pre));
 }
 
-// ─── Utilities ───────────────────────────────────────────────────────────────
+// }}}
+// Utilities ------------------------------------------------------- {{{
 
-/** Returns the page-relative centre of a cell element. */
+// Returns the page-relative center of a cell element
 function cellPos(el) {
   const r = el.getBoundingClientRect();
   const b = document.body.getBoundingClientRect();
   return [r.left - b.left + r.width / 2, r.top - b.top + r.height / 2];
 }
 
-/** Snap a mouse position to the nearest compass direction relative to (ax, ay). */
+// Snap a mouse position to the nearest compass direction relative to (ax, ay)
 function getCompass(mx, my, ax, ay) {
   const angle = Math.atan2(my - ay, mx - ax) * (180 / Math.PI);
   const snapped = Math.round(angle / 45) * 45;
   return ANGLE_TO_DIR[snapped] ?? "c";
 }
 
-/** Return true when (x, y) falls inside the centre-deadzone bounding box. */
+// Check if mouse is in center,
 function isInCenter(grid, x, y) {
   const { rows: [r0, r1], cols: [c0, c1] } = CENTER_BOUNDS;
   const tl = grid[r0][c0].getBoundingClientRect();
@@ -162,16 +128,17 @@ function isInCenter(grid, x, y) {
   return x >= tl.left && x <= br.right && y >= tl.top && y <= br.bottom;
 }
 
-/** Return the two cell spans that represent the eye pupil in a given direction. */
+// Return the two cell spans that represent the eye pupil in a given direction
 function eyeCells(grid, [r, c], dir) {
   const [dr, dc] = COMPASS[dir];
   const col = c + dc * EYE_CHAR_WIDTH;
   return [grid[r + dr][col], grid[r + dr][col + 1]];
 }
 
-// ─── Eyes ────────────────────────────────────────────────────────────────────
+// }}}
+// Eyes ------------------------------------------------------------ {{{
 
-/** Snapshot every compass slot for each eye origin and clear the centre slot. */
+// Snapshot every compass slot for each eye origin and clear the center slot
 function initEyes(grid) {
   return EYE_ORIGINS.map((origin) => {
     const snapshot = Object.fromEntries(
@@ -189,19 +156,24 @@ function initEyes(grid) {
   });
 }
 
-// ─── Artifact animation ───────────────────────────────────────────────────────
+// }}}
+// Artifact animation ---------------------------------------------- {{{
 
-/**
- * Scroll an ASCII artifact upward through the grid, clipping it at clipRow.
- * Only cells that are currently empty (' ') are overwritten.
- */
-function animateArtifact(grid, artifactStr, startCol, clipRow, intervalMs = 300) {
+// Scroll an ASCII artifact upward past the clip row,
+function animateArtifact(
+  grid,
+  artifactStr,
+  startCol,
+  clipRow,
+  intervalMs = 300) {
+
   let lines = artifactStr.split("\n");
   lines = lines.filter(s => s !== "");
   const gridRows = grid.length;
-  let scrollY    = clipRow;  // grid row of the artifact's top line
-  let painted    = [];       // { r, c, prev } — cells we've temporarily overwritten
+  let scrollY    = clipRow; // grid row of the artifact's top line
+  let painted    = []; // { r, c, prev } — cells we've temporarily overwritten
 
+  // Restore cell to unplainted state
   function restore() {
     for (const { r, c, prev } of painted) {
       if (grid[r]?.[c]) {
@@ -219,11 +191,9 @@ function animateArtifact(grid, artifactStr, startCol, clipRow, intervalMs = 300)
     if (styled) grid[r][c].classList.add("artifact-fg");
   }
 
-  /**
-   * At the clip row, replace the bottom edge of the last visible line with
-   * closing corners (┘ … └) so the artifact appears to emerge from behind
-   * the clip boundary.
-   */
+  // At the clip row, replace the bottom edge of the last visible line with
+  // closing corners (┘ … └) so the artifact appears to emerge from behind
+  // the clip boundary.
   function paintClipEdge(refLine) {
     let first = -1, last = -1;
     for (let dx = 0; dx < refLine.length; dx++) {
@@ -264,7 +234,6 @@ function animateArtifact(grid, artifactStr, startCol, clipRow, intervalMs = 300)
       }
     }
 
-    // Loop: reset once the artifact has fully scrolled off the top
     if (scrollY + lines.length <= 0) scrollY = clipRow;
     setTimeout(step, intervalMs);
   }
@@ -272,7 +241,8 @@ function animateArtifact(grid, artifactStr, startCol, clipRow, intervalMs = 300)
   setTimeout(step, intervalMs);
 }
 
-// ─── Entry point ─────────────────────────────────────────────────────────────
+// }}}
+// Entry point ----------------------------------------------------- {{{
 
 function main() {
   const grid    = charGrid(document.querySelector("pre.ansi"));
@@ -282,33 +252,48 @@ function main() {
   let color       = DEFAULT_COLOR;
   let prevCompass = null;
 
-  function render() {
+  function renderEyes() {
     for (const { origin, snapshot, eyeChar } of eyeData) {
       if (prevCompass !== null) {
-        eyeCells(grid, origin, prevCompass)
-          .forEach((s, i) => { s.textContent = snapshot[prevCompass][i]; s.className = ""; });
+        eyeCells(grid, origin, prevCompass).forEach((s, i) => {
+          s.textContent = snapshot[prevCompass][i]; s.className = "";
+        });
       }
-      eyeCells(grid, origin, compass)
-        .forEach((s, i) => { s.textContent = eyeChar[i]; s.className = `${color}-fg`; });
+      eyeCells(grid, origin, compass).forEach((s, i) => {
+          s.textContent = eyeChar[i]; s.className = `${color}-fg`;
+        });
     }
     prevCompass = compass;
   }
 
-  render();
+  renderEyes();
   animateArtifact(grid, ARTIFACTS[3], 10, 27);
+  animateArtifact(grid, ARTIFACTS[2], 1, 27);
+  animateArtifact(grid, ARTIFACTS[1], 30, 26);
 
+  // Change eye color on link hover
   document.querySelectorAll("a").forEach((a) => {
-    a.addEventListener("mouseenter", () => { color = a.dataset.color; render(); });
-    a.addEventListener("mouseleave", () => { color = DEFAULT_COLOR;   render(); });
+    a.addEventListener("mouseenter", () => {
+      color = a.dataset.color;
+      renderEyes();
+    });
+    a.addEventListener("mouseleave", () => {
+      color = DEFAULT_COLOR;
+      renderEyes();
+    });
   });
 
+  // Eyes follow mouse
   document.addEventListener("mousemove", throttle((e) => {
     const [ax, ay] = cellPos(grid[ANCHOR_CELL[0]][ANCHOR_CELL[1]]);
     const dir = isInCenter(grid, e.clientX, e.clientY)
       ? "c"
       : getCompass(e.pageX, e.pageY, ax, ay);
-    if (dir !== compass) { compass = dir; render(); }
+    if (dir !== compass) { compass = dir; renderEyes(); }
   }, 200));
 }
 
+// }}}
+
 main();
+// vim: set ts=2 sw=2 tw=0 fdm=marker et :
