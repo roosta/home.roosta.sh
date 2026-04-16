@@ -196,7 +196,8 @@ function initEyes(grid) {
  * Only cells that are currently empty (' ') are overwritten.
  */
 function animateArtifact(grid, artifactStr, startCol, clipRow, intervalMs = 300) {
-  const lines    = artifactStr.trim().split("\n");
+  let lines = artifactStr.split("\n");
+  lines = lines.filter(s => s !== "");
   const gridRows = grid.length;
   let scrollY    = clipRow;  // grid row of the artifact's top line
   let painted    = [];       // { r, c, prev } — cells we've temporarily overwritten
@@ -294,7 +295,7 @@ function main() {
   }
 
   render();
-  animateArtifact(grid, ARTIFACTS[2], 10, 27);
+  animateArtifact(grid, ARTIFACTS[3], 10, 27);
 
   document.querySelectorAll("a").forEach((a) => {
     a.addEventListener("mouseenter", () => { color = a.dataset.color; render(); });
@@ -311,4 +312,3 @@ function main() {
 }
 
 main();
-
