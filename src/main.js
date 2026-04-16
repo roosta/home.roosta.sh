@@ -18,6 +18,21 @@ const EYE_ORIGINS = [[25, 52], [25, 66]];
 const ANCHOR = [26, 63];
 const CENTER_BOUNDS = { rows: [24, 28], cols: [51, 79] };
 
+const ARTIFACTS = [
+`
+┌┐
+││
+└┘
+`,
+`
+┌─────┐
+│     │
+│     │
+└─────┘
+`
+]
+
+// Parse ASCII art from markup and build DOM
 function charGrid(pre) {
   // Flatten child nodes into {ch, anchor} pairs, preserving anchor membership
   const chars = [];
@@ -38,8 +53,15 @@ function charGrid(pre) {
   }
   if (current.length) lines.push(current);
 
+  // Pad all lines to the same width so empty rows still have addressable cells
+  const maxLen = Math.max(...lines.map(l => l.length));
+  const padded = lines.map(line => {
+    const pad = maxLen - line.length;
+    return pad > 0 ? [...line, ...Array(pad).fill({ ch: ' ', anchor: null })] : line;
+  });
+
   pre.textContent = "";
-  return lines.map((line, y) => {
+  return padded.map((line, y) => {
     const rowEl = document.createElement("span");
     rowEl.id = `line-${y}`;
     let curAnchorNode = null;
@@ -111,6 +133,64 @@ function initEyes(grid) {
   });
 }
 
+function animateArtifact(grid, artifactStr, startCol, startRow, intervalMs = 300) {
+  const lines = artifactStr.trim().split('\n');
+  const rows = grid.length;
+  let topRow = startRow ?? rows; // start just below the given row
+  let active = []; // { r, c, prev } cells we've temporarily overwritten
+
+  function step() {
+    // Restore previous cells to their saved content
+    for (const { r, c, prev } of active) {
+      if (grid[r]?.[c]) {
+        grid[r][c].textContent = prev;
+        grid[r][c].classList.remove('artifact-fg');
+      }
+    }
+    active = [];
+
+    topRow--;
+
+    for (let dy = 0; dy < lines.length; dy++) {
+      const r = topRow + dy;
+      if (r < 0 || r >= rows) continue;
+
+      // If we intersect the sheer line
+      if (r === startRow) {
+        // Find leftmost and rightmost non-space positions in this artifact line
+        const line = lines[dy];
+        let first = -1, last = -1;
+        for (let dx = 0; dx < line.length; dx++) {
+          if (line[dx] !== ' ') { if (first === -1) first = dx; last = dx; }
+        }
+        for (const dx of [first, last]) {
+          if (dx === -1) continue;
+          const c = startCol + dx;
+          if (!grid[r]?.[c]) continue;
+          active.push({ r, c, prev: grid[r][c].textContent });
+          grid[r][c].textContent = '┴';
+        }
+      } else if (r < startRow) {
+        for (let dx = 0; dx < lines[dy].length; dx++) {
+          const c = startCol + dx;
+          const ch = lines[dy][dx];
+          if (ch === ' ' || !grid[r]?.[c]) continue;
+          if (grid[r][c].textContent === ' ') {
+            active.push({ r, c, prev: ' ' });
+            grid[r][c].textContent = ch;
+            grid[r][c].classList.add('artifact-fg');
+          }
+        }
+      }
+    }
+
+    if (topRow + lines.length <= 0) topRow = startRow;
+    setTimeout(step, intervalMs);
+  }
+
+  setTimeout(step, intervalMs);
+}
+
 function main() {
   const grid = charGrid(document.querySelector("pre.ansi"));
   let compass = "c";
@@ -132,6 +212,8 @@ function main() {
   }
 
   render();
+
+  animateArtifact(grid, ARTIFACTS[1], 10, 27);
 
   document.querySelectorAll("a").forEach((a) => {
     a.addEventListener("mouseenter", () => { color = a.dataset.color; render(); });
