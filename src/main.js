@@ -1,6 +1,6 @@
 import "./style.css";
 import { throttle } from "lodash-es";
-import { readFileSync } from 'fs';
+import ARTIFACTS from "virtual:artifacts";
 
 const DEFAULT_COLOR = "yellow";
 
@@ -24,9 +24,6 @@ const EYE_ORIGINS   = [[25, 52], [25, 66]];
 const ANCHOR_CELL   = [26, 63];
 const CENTER_BOUNDS = { rows: [24, 28], cols: [51, 79] };
 
-const ARTIFACTS = readFileSync('./assets/artifacts.txt', 'utf-8')
-  .split('\n')
-  .map(a => a.trim());
 
 // ─── charGrid helpers ────────────────────────────────────────────────────────
 
