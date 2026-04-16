@@ -163,12 +163,15 @@ function animateArtifact(grid, artifactStr, startCol, startRow, intervalMs = 300
         for (let dx = 0; dx < line.length; dx++) {
           if (line[dx] !== ' ') { if (first === -1) first = dx; last = dx; }
         }
-        for (const dx of [first, last]) {
-          if (dx === -1) continue;
+        if (first === -1) continue;
+        // Left corner → ┘, right corner → └, blank everything between
+        for (let dx = first; dx <= last; dx++) {
           const c = startCol + dx;
           if (!grid[r]?.[c]) continue;
           active.push({ r, c, prev: grid[r][c].textContent });
-          grid[r][c].textContent = '┴';
+          if (dx === first)      grid[r][c].textContent = '┘';
+          else if (dx === last)  grid[r][c].textContent = '└';
+          else                   grid[r][c].textContent = ' ';
         }
       } else if (r < startRow) {
         for (let dx = 0; dx < lines[dy].length; dx++) {
