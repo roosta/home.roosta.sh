@@ -12,7 +12,7 @@
     "eslint": "^10.2.1",
     "htmlhint": "^1.9.2",
     "vite": "^8.0.9",
-    "vite-plugin-handlebars": "^2.0.0"
+    "vite-plugin-handlebars": "^2.0.3"
   },
   "dependencies": {
     "@srcery-colors/srcery-palette": "2.0.0-alpha.0",
