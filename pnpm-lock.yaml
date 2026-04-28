@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@srcery-colors/srcery-palette':
-        specifier: 2.0.0-alpha.0
-        version: 2.0.0-alpha.0
+        specifier: 2.0.0-alpha.2
+        version: 2.0.0-alpha.2
       lodash-es:
         specifier: ^4.18.1
         version: 4.18.1
@@ -346,8 +346,8 @@ packages:
   '@rolldown/pluginutils@1.0.0-rc.16':
     resolution: {integrity: sha512-45+YtqxLYKDWQouLKCrpIZhke+nXxhsw+qAHVzHDVwttyBlHNBVs2K25rDXrZzhpTp9w1FlAlvweV1H++fdZoA==}
 
-  '@srcery-colors/srcery-palette@2.0.0-alpha.0':
-    resolution: {integrity: sha512-cdOZWLPuIcb/uZVgZrkRnQxGZ3/0TvPJKvnCw0Ag3RtIEBw69Q7Tpw+NuSncrLmhROYVCGM+7zCBVfPY+oqORQ==}
+  '@srcery-colors/srcery-palette@2.0.0-alpha.2':
+    resolution: {integrity: sha512-3XPpk8RUzs56GakxfZlmVBex+Mfc4Ajr+MnTWhwdgugNM3ckOBhyZzM+C55begVgQmOC5S/AVp0udyZfKl9RBg==}
 
   '@tybys/wasm-util@0.10.1':
     resolution: {integrity: sha512-9tTaPJLSiejZKx+Bmog4uSubteqTvFrVrURwkmHixBo0G4seD0zUxp98E1DzUBJxLQ3NPwXrGKDiVjwx/DpPsg==}
@@ -1057,7 +1057,7 @@ snapshots:
 
   '@rolldown/pluginutils@1.0.0-rc.16': {}
 
-  '@srcery-colors/srcery-palette@2.0.0-alpha.0': {}
+  '@srcery-colors/srcery-palette@2.0.0-alpha.2': {}
 
   '@tybys/wasm-util@0.10.1':
     dependencies:
