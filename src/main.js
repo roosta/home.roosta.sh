@@ -207,8 +207,17 @@ function animateArtifact(
     for (let dx = first; dx <= last; dx++) {
       let ch = " "
       if (dx === first) {
-        ch = "┘";
+        if (refLine[dx] === "┌" || refLine[dx] ===  "│") {
+          ch = "│"
+        } else {
+          ch = "┘";
+        }
       } else if (dx === last) {
+        if (refLine[dx] === "┌" || refLine[dx] ===  "│") {
+          ch = "│"
+        } else {
+          ch = "└";
+        }
         ch = "└"
       }
       paintCell(clipRow, startCol + dx, ch);
@@ -272,8 +281,8 @@ function main() {
   }
 
   renderEyes();
-  animateArtifact(grid, ARTIFACTS[3], 10, 27);
-  animateArtifact(grid, ARTIFACTS[2], 1, 27);
+  // animateArtifact(grid, ARTIFACTS[3], 10, 27);
+  // animateArtifact(grid, ARTIFACTS[2], 1, 27);
   animateArtifact(grid, ARTIFACTS[1], 30, 26);
 
   // Change eye color on link hover
