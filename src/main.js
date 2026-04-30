@@ -205,7 +205,12 @@ function animateArtifact(
     if (first === -1) return;
 
     for (let dx = first; dx <= last; dx++) {
-      const ch = dx === first ? "┘" : dx === last ? "└" : " ";
+      let ch = " "
+      if (dx === first) {
+        ch = "┘";
+      } else if (dx === last) {
+        ch = "└"
+      }
       paintCell(clipRow, startCol + dx, ch);
     }
   }
