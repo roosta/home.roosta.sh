@@ -10,5 +10,5 @@ RUN npm install -g pnpm@12.21.0 \
 COPY . ./
 RUN pnpm run build
 
-FROM nginx:1.30.7-alpine3.24-slim@sha256:8c950211a641ec5b23f265450517001f6bcca533666120ebe36cb4cff3d00a55
+FROM nginx:1.31.8-alpine3.24-slim@sha256:4c734d33ee731135dc9f2349914a34551c920f4451fca8bb05bf5880eb9079e8
 COPY --from=build /app/dist /usr/share/nginx/html
